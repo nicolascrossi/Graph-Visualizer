@@ -26,7 +26,7 @@ nodes: List[List[Node]] = []
 for i in range(NODES):
     lst = []
     for k in range(NODES):
-        lst.append(Node(dim, 0, BLUE))
+        lst.append(Node(dim, 1, BLUE))
     nodes.append(lst)
 
 for r_i, row in enumerate(nodes):
@@ -75,6 +75,7 @@ while not done:
                     for node in row:
                         if node.inside(event.pos):
                             node.color = RED
+                            node.weight = 1000
                             if node == goal:
                                 goal = None
                             elif node == start:
@@ -84,6 +85,7 @@ while not done:
                     for node in row:
                         if node.inside(event.pos):
                             node.color = BLUE
+                            node.weight = 1
                             if node == goal:
                                 goal = None
                             elif node == start:
@@ -105,6 +107,7 @@ while not done:
                                 goal.color = WHITE
                             else:
                                 node.color = RED
+                                node.weight = 1000
                                 if node == goal:
                                     goal = None
                                 elif node == start:
@@ -125,6 +128,7 @@ while not done:
                                 goal.color = WHITE
                             else:
                                 node.color = BLUE
+                                node.weight = 1
                                 if node == goal:
                                     goal = None
                                 elif node == start:
@@ -146,6 +150,7 @@ while not done:
                         node.color = BLUE
                         start = None
                         goal = None
+                        node.weight = 1
 
             if event.key == pygame.K_SPACE:
                 if start and goal:
