@@ -40,18 +40,33 @@ class NodeIter:
         self.index: int = 0
 
     def __next__(self):
-        match self.index:
-            case 0:
-                self.index += 1
-                return self.node.left
-            case 1:
-                self.index += 1
-                return self.node.up
-            case 2:
-                self.index += 1
-                return self.node.right
-            case 3:
-                self.index += 1
-                return self.node.down
-            case _:
-                raise StopIteration
+        # match self.index:
+        #     case 0:
+        #         self.index += 1
+        #         return self.node.left
+        #     case 1:
+        #         self.index += 1
+        #         return self.node.up
+        #     case 2:
+        #         self.index += 1
+        #         return self.node.right
+        #     case 3:
+        #         self.index += 1
+        #         return self.node.down
+        #     case _:
+        #         raise StopIteration
+
+        if self.index == 0:
+            self.index += 1
+            return self.node.left
+        elif self.index == 1:
+            self.index += 1
+            return self.node.up
+        elif self.index == 2:
+            self.index += 1
+            return self.node.right
+        elif self.index == 3:
+            self.index += 1
+            return self.node.down
+        else:
+            raise StopIteration
