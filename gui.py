@@ -1,9 +1,9 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 import pygame
 from node import Node
 from collections import defaultdict
 
-from algorithms import *
+from algorithms import bfs_step, bfs_step_setup, trail, bfs
 
 #define constants
 BLACK = (0,0,0)
@@ -27,6 +27,7 @@ for i in range(NODES):
     lst = []
     for k in range(NODES):
         lst.append(Node(dim, 1, BLUE))
+        lst[-1].pos = (k, i)
     nodes.append(lst)
 
 for r_i, row in enumerate(nodes):
@@ -56,11 +57,13 @@ clock = pygame.time.Clock()
 
 done = False
 
-start: Node | None = None
-goal: Node | None = None
+start: Union[Node, None] = None
+goal: Union[Node, None] = None
+
 s_down = False
 g_down = False
-
+num_down = (False, None)
+keys = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 stepping = False
 
 q = prev = None
@@ -74,8 +77,12 @@ while not done:
                 for row in nodes:
                     for node in row:
                         if node.inside(event.pos):
-                            node.color = RED
-                            node.weight = 1000
+                            if num_down[0]:
+                                node.color = (255 * (num_down[1] - 48)/9, 255 * (num_down[1] - 48)/9, 255 * (num_down[1] - 48)/9)
+                                node.weight = num_down[1] - 48
+                            else:
+                                node.color = RED
+                                node.weight = 1000
                             if node == goal:
                                 goal = None
                             elif node == start:
@@ -105,6 +112,13 @@ while not done:
                                     goal.color = BLUE
                                 goal = node
                                 goal.color = WHITE
+                            elif num_down[0]:
+                                if node == goal:
+                                    goal = None
+                                elif node == start:
+                                    start = None
+                                node.color = (255 * (num_down[1] - 48)/9, 255 * (num_down[1] - 48)/9, 255 * (num_down[1] - 48)/9)
+                                node.weight = num_down[1] - 48
                             else:
                                 node.color = RED
                                 node.weight = 1000
@@ -140,11 +154,11 @@ while not done:
             elif event.key == pygame.K_g:
                 g_down = True
 
-            if event.key == pygame.K_q:
+            elif event.key == pygame.K_q:
                 if start and goal:
                     stepping = True
             
-            if event.key == pygame.K_r:
+            elif event.key == pygame.K_r:
                 for row in nodes:
                     for node in row:
                         node.color = BLUE
@@ -152,16 +166,24 @@ while not done:
                         goal = None
                         node.weight = 1
 
-            if event.key == pygame.K_SPACE:
+            elif event.key == pygame.K_SPACE:
                 if start and goal:
                     # INSERT FUNCTION HERE
                     bfs(start, goal)
+            else:
+                for key in keys:
+                    if event.key == key:
+                        print(event.key)
+                        num_down = (True, key)
 
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
                 s_down = False
             elif event.key == pygame.K_g:
                 g_down = False
+            else:
+                if event.key == num_down[1]:
+                    num_down = (False, None)
 
     screen.fill(BLACK)
 

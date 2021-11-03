@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 from pygame import Rect
 from pygame.surface import Surface
@@ -15,14 +15,21 @@ class Node:
         # self.right: Tuple[Node | None, int] = (None, -1)
         # self.down: Tuple[Node | None, int] = (None, -1)
 
-        self.left: Node | None = None
-        self.up: Node | None = None
-        self.right: Node | None = None
-        self.down: Node | None = None
+        # self.left: Node | None = None
+        # self.up: Node | None = None
+        # self.right: Node | None = None
+        # self.down: Node | None = None
+
+        self.left: Union[Node, None] = None
+        self.up: Union[Node, None] = None
+        self.right: Union[Node, None] = None
+        self.down: Union[Node, None] = None
 
         self.dim = dim
         self.rect = Rect(0, 0, *dim)
         self.color = color
+
+        self.pos = (0, 0)
 
     def __iter__(self):
         return NodeIter(self)
