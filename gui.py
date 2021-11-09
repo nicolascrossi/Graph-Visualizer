@@ -3,7 +3,7 @@ import pygame
 from node import Node
 from collections import defaultdict
 
-from algorithms import bfs_step, bfs_step_setup, trail, bfs
+from algorithms import a_star, a_star_setup, a_star_step
 
 #define constants
 BLACK = (0,0,0)
@@ -11,6 +11,7 @@ WHITE = (255,255,255)
 RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
+PURPLE = (221,160,221)
 
 # Screen height and width
 S_HEIGHT = 900
@@ -66,7 +67,7 @@ num_down = (False, None)
 keys = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 stepping = False
 
-q = prev = None
+dist = prev = adj = None
 
 while not done:
     for event in pygame.event.get(): #check the events list
@@ -169,7 +170,7 @@ while not done:
             elif event.key == pygame.K_SPACE:
                 if start and goal:
                     # INSERT FUNCTION HERE
-                    bfs(start, goal)
+                    a_star(start, goal)
             else:
                 for key in keys:
                     if event.key == key:
@@ -188,13 +189,13 @@ while not done:
     screen.fill(BLACK)
 
     if stepping:
-        if q is None and prev is None:
-            q, prev = bfs_step_setup(start)
+        if dist is None or prev is None or adj is None:
+            dist, prev, adj = a_star_setup(start)
         
-        if bfs_step(q, prev, goal):
-            trail(prev, goal, start)
-            q = None
+        if a_star_step(start, goal, dist, prev, adj):
+            dist = None
             prev = None
+            adj = None
             stepping = False
 
     x = 0
