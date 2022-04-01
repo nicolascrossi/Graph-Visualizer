@@ -3,7 +3,7 @@ import pygame
 from node import Node
 from collections import defaultdict
 
-from algorithms import a_star, a_star_setup, a_star_step
+from algorithms import a_star, a_star_setup, a_star_step, dijkstra
 
 #define constants
 BLACK = (0,0,0)
@@ -18,7 +18,7 @@ S_HEIGHT = 900
 S_WIDTH = 1000
 
 # Number of nodes to fit in the screen
-NODES = 100
+NODES = 10
 
 dim = (S_WIDTH // NODES, S_HEIGHT // NODES)
 
@@ -170,7 +170,7 @@ while not done:
             elif event.key == pygame.K_SPACE:
                 if start and goal:
                     # INSERT FUNCTION HERE
-                    a_star(start, goal)
+                    dijkstra(start, goal)
             else:
                 for key in keys:
                     if event.key == key:
